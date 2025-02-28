@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 app.use(cors()) 
+app.use(express.static('dist'))
 app.use(express.json()); 
 
 
@@ -21,6 +22,16 @@ app.use((req, res, next) => {
 
 app.get('/api/notes', (request, response) => {
   response.json(notes)
+})
+app.get('/api/notes/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const note = notes.find(note => note.id === id)
+  
+  if (note) {
+    response.json(note)
+  } else {
+    response.status(404).end()
+  }
 })
 
 app.delete('/api/notes/:id', (request, response) => {
